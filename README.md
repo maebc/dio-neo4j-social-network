@@ -30,3 +30,6 @@ MATCH (u:Usuario {nome: "Eliana"})-[:SEGUE]->(amigo)-[:SEGUE]->(sugestao)
 WHERE NOT (u)-[:SEGUE]->(sugestao) AND sugestao <> u
 RETURN sugestao.nome AS Recomendacao, count(*) AS AmigosEmComum
 ORDER BY AmigosEmComum DESC;
+
+---
+**Desenvolvido por Mayra Carvalho** *Gestora de Automação e IA | Estudante de Cibersegurança*
