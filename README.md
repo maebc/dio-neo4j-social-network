@@ -2,30 +2,31 @@
 Análise de conexões de redes sociais utilizando Neo4j, Cypher e boas práticas de integridade de dados (Desafio DIO).
 # Análise de Redes Sociais com Neo4j 🌐
 
-Este projeto foi desenvolvido como parte do desafio prático da **DIO (Digital Innovation One)**. O objetivo é demonstrar a aplicação de bancos de dados baseados em grafos para modelar e analisar conexões complexas em uma rede social focada em tecnologia.
+Este repositório contém o desafio prático de modelagem de dados em grafos, desenvolvido para o módulo de banco de dados NoSQL da **DIO (Digital Innovation One)**. O projeto foca em como o Neo4j otimiza a análise de conexões complexas e a integridade de dados em redes sociais.
+
+## 📊 Visualização do Grafo
+![Resultado do Script de Carga](image_01095a.jpg)
 
 ## 🚀 Sobre o Projeto
 
-Como Gestora de Automação e IA, busquei aplicar os conceitos de **Neo4j** para resolver problemas de escalabilidade e performance em consultas de relacionamentos (como "Amigos de Amigos"), que seriam custosas em bancos de dados relacionais tradicionais.
+Como profissional focada em **Automação e IA**, utilizei este desafio para explorar como bancos de dados orientados a grafos superam os modelos relacionais tradicionais (SQL) em cenários de alta conectividade, como sugestões de amizade e análise de influência.
 
-### Diferenciais Técnicos Aplicados:
-* **Integridade de Dados:** Uso de `Constraints` de unicidade para garantir que IDs de usuários e posts não se dupliquem.
-* **Otimização:** Implementação de índices para buscas rápidas por propriedades específicas.
-* **Modelagem Eficiente:** Estrutura de grafos permitindo saltos (*hops*) rápidos entre Usuários, Posts e Tópicos de interesse.
+### Diferenciais Implementados:
+- **Constraints de Unicidade:** Garantia de que IDs de `Usuario`, `Post` e `Topico` sejam únicos, evitando redundância na ingestão de dados.
+- **Consultas Cypher de Valor:** Implementação de lógica para encontrar "Amigos de Amigos" e recomendações de conteúdo baseado em tópicos.
+- **Modelagem de Relacionamentos:** Estrutura clara usando os verbos `SEGUE`, `POSTOU` e `PERTENCE_A`.
 
-## 📊 Modelo do Grafo
+## 🛠️ Tecnologias Utilizadas
+- **Neo4j AuraDB** (Cloud Database)
+- **Cypher Query Language** (Linguagem de consulta)
+- **Arrows.app** (Modelagem visual)
 
-O modelo consiste em:
-- **Labels:** `Usuario`, `Post`, `Topico`.
-- **Relacionamentos:** - `(:Usuario)-[:SEGUE]->(:Usuario)`
-  - `(:Usuario)-[:POSTOU]->(:Post)`
-  - `(:Post)-[:PERTENCE_A]->(:Topico)`
+## 🔍 Consultas de Destaque
 
-## 🔍 Exemplos de Consultas (Cypher)
-
-### 1. Recomendação de Amizade (Network Growth)
-Busca por amigos de amigos que o usuário ainda não segue:
+### Sugestão de Amizade (Network Expansion)
+Esta query identifica usuários que seus amigos seguem, mas você ainda não, ranqueando-os por amigos em comum:
 ```cypher
 MATCH (u:Usuario {nome: "Eliana"})-[:SEGUE]->(amigo)-[:SEGUE]->(sugestao)
 WHERE NOT (u)-[:SEGUE]->(sugestao) AND sugestao <> u
-RETURN sugestao.nome, count(*) AS conexoes_em_comum;
+RETURN sugestao.nome AS Recomendacao, count(*) AS AmigosEmComum
+ORDER BY AmigosEmComum DESC;
